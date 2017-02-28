@@ -1,0 +1,46 @@
+My patches for [st](st.suckless.org).
+
+#### `st-apc-cwd-20170228-c63a87c.diff`
+
+Adds an Application Control Command to set the cwd.
+I created this to be used together with `tabbed-keep-cwd-20170228-bc23614.diff` from [tabbed-patches](/z33ky/tabbed-patches).
+
+#### `st-scrollback-begend-20170228-c63a87c.diff`
+
+Based on st-scrollback-20170104-c63a87c.diff.
+
+Adds functions to jump to the beginning and end of the history.
+
+#### `st-scrollback-fullpage-20170228-c63a87c.diff`
+
+Based on st-scrollback-20170104-c63a87c.diff.
+
+Jumps one line further when passing negative values to `kscroll{down,up}`.
+
+#### `st-scrollback-begend-fullpage-20170228-c63a87c.diff`
+
+Based on st-scrollback-20170104-c63a87c.diff.
+
+Combines the `st-scrollback-begend-20170228-c63a87c.diff` and `st-scrollback-fullpage-20170228-c63a87c.diff` patches which conflict when applying separately.
+
+#### `st-scrollback-histsize-20170228-c63a87c.diff`
+
+Based on st-scrollback-20170104-c63a87c.diff.
+
+Moves the `histsize` constant to `config.h`.
+
+#### `st-scrollback-stay-20170228-c63a87c.diff`
+
+Based on st-scrollback-20170104-c63a87c.diff.
+
+Stops scrolling through history when further output is written to the terminal.
+
+#### `st-vertcenter-scale1-20170228-c63a87c.diff`
+
+Based on st-vertcenter-20160819-023225e.diff.
+
+Works with `chscale == 1`.
+
+#### `st-altscreen-default-xcursor-20170228-c63a87c.diff`
+
+Change to default X11 cursor when in `MODE_ALTSCREEN`.
