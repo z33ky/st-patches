@@ -4,6 +4,7 @@ My patches for [st](st.suckless.org).
 
 Adds an Application Control Command to set the cwd.
 I created this to be used together with `tabbed-keep-cwd-20170228-bc23614.diff` from [tabbed-patches](/z33ky/tabbed-patches).
+You can override the `cd` command of your shell, or for `zsh` you can also use `function chpwd`, and just do `echo -ne "\033_0;${PWD}\007"` from there.
 
 #### `st-scrollback-begend-20170228-c63a87c.diff`
 
