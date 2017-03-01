@@ -1,0 +1,96 @@
+diff --git a/st.c b/st.c
+index fbcd9e0..20e855c 100644
+--- a/st.c
++++ b/st.c
+@@ -267,6 +267,7 @@ typedef struct {
+ 	Draw draw;
+ 	Visual *vis;
+ 	XSetWindowAttributes attrs;
++	Cursor xcursor;
+ 	int scr;
+ 	int isfixed; /* is fixed geometry? */
+ 	int l, t; /* left and top offset */
+@@ -418,6 +419,7 @@ static void tswapscreen(void);
+ static void tsetdirt(int, int);
+ static void tsetdirtattr(int);
+ static void tsetmode(int, int, int *, int);
++static void tsetmousetracking(int, int, int);
+ static void tfulldirt(void);
+ static void techo(Rune);
+ static void tcontrolcode(uchar );
+@@ -2180,24 +2182,16 @@ tsetmode(int priv, int set, int *args, int narg)
+ 				MODBIT(term.mode, !set, MODE_HIDE);
+ 				break;
+ 			case 9:    /* X10 mouse compatibility mode */
+-				xsetpointermotion(0);
+-				MODBIT(term.mode, 0, MODE_MOUSE);
+-				MODBIT(term.mode, set, MODE_MOUSEX10);
++				tsetmousetracking(0, set, MODE_MOUSEX10);
+ 				break;
+ 			case 1000: /* 1000: report button press */
+-				xsetpointermotion(0);
+-				MODBIT(term.mode, 0, MODE_MOUSE);
+-				MODBIT(term.mode, set, MODE_MOUSEBTN);
++				tsetmousetracking(0, set, MODE_MOUSEBTN);
+ 				break;
+ 			case 1002: /* 1002: report motion on button press */
+-				xsetpointermotion(0);
+-				MODBIT(term.mode, 0, MODE_MOUSE);
+-				MODBIT(term.mode, set, MODE_MOUSEMOTION);
++				tsetmousetracking(0, set, MODE_MOUSEMOTION);
+ 				break;
+ 			case 1003: /* 1003: enable all mouse motions */
+-				xsetpointermotion(set);
+-				MODBIT(term.mode, 0, MODE_MOUSE);
+-				MODBIT(term.mode, set, MODE_MOUSEMANY);
++				tsetmousetracking(set, set, MODE_MOUSEMANY);
+ 				break;
+ 			case 1004: /* 1004: send focus events to tty */
+ 				MODBIT(term.mode, set, MODE_FOCUS);
+@@ -2275,6 +2269,18 @@ tsetmode(int priv, int set, int *args, int narg)
+ }
+ 
+ void
++tsetmousetracking(int pmset, int set, int mode)
++{
++	xsetpointermotion(pmset);
++	MODBIT(term.mode, 0, MODE_MOUSE);
++	MODBIT(term.mode, set, mode);
++	if (set)
++		XUndefineCursor(xw.dpy, xw.win);
++	else
++		XDefineCursor(xw.dpy, xw.win, xw.xcursor);
++}
++
++void
+ csihandle(void)
+ {
+ 	char buf[40];
+@@ -3572,7 +3578,6 @@ void
+ xinit(void)
+ {
+ 	XGCValues gcvalues;
+-	Cursor cursor;
+ 	Window parent;
+ 	pid_t thispid = getpid();
+ 	XColor xmousefg, xmousebg;
+@@ -3648,8 +3653,8 @@ xinit(void)
+ 		die("XCreateIC failed. Could not obtain input method.\n");
+ 
+ 	/* white cursor, black outline */
+-	cursor = XCreateFontCursor(xw.dpy, mouseshape);
+-	XDefineCursor(xw.dpy, xw.win, cursor);
++	xw.xcursor = XCreateFontCursor(xw.dpy, mouseshape);
++	XDefineCursor(xw.dpy, xw.win, xw.xcursor);
+ 
+ 	if (XParseColor(xw.dpy, xw.cmap, colorname[mousefg], &xmousefg) == 0) {
+ 		xmousefg.red   = 0xffff;
+@@ -3663,7 +3668,7 @@ xinit(void)
+ 		xmousebg.blue  = 0x0000;
+ 	}
+ 
+-	XRecolorCursor(xw.dpy, cursor, &xmousefg, &xmousebg);
++	XRecolorCursor(xw.dpy, xw.xcursor, &xmousefg, &xmousebg);
+ 
+ 	xw.xembed = XInternAtom(xw.dpy, "_XEMBED", False);
+ 	xw.wmdeletewin = XInternAtom(xw.dpy, "WM_DELETE_WINDOW", False);

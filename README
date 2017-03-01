@@ -42,6 +42,6 @@ Based on st-vertcenter-20160819-023225e.diff.
 
 Works with `chscale == 1`.
 
-#### `st-altscreen-default-xcursor-20170228-c63a87c.diff`
+#### `st-mousetracking-default-xcursor-20170301-c63a87c.diff`
 
-Change to default X11 cursor when in `MODE_ALTSCREEN`.
+Change to default X11 cursor when in mouse tracking mode.
