@@ -1,7 +1,16 @@
 diff --git a/st.c b/st.c
-index 0f457a7..72d17a5 100644
+index 0f457a7..ba3bcc1 100644
 --- a/st.c
 +++ b/st.c
+@@ -732,7 +732,7 @@ x2col(int x)
+ int
+ y2row(int y)
+ {
+-	y -= borderpx;
++	y -= borderpx + xw.cyo;
+ 	y /= xw.ch;
+ 
+ 	return LIMIT(y, 0, term.row-1);
 @@ -3335,7 +3335,7 @@ xhints(void)
  	sizeh->flags = PSize | PResizeInc | PBaseSize;
  	sizeh->height = xw.h;
