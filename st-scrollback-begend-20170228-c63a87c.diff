@@ -12,7 +12,7 @@ index 9b51988..8c630cd 100644
  
  /*
 diff --git a/st.c b/st.c
-index 64bc208..11591f5 100644
+index 64bc208..e317bf8 100644
 --- a/st.c
 +++ b/st.c
 @@ -246,6 +246,7 @@ typedef struct {
@@ -44,13 +44,15 @@ index 64bc208..11591f5 100644
  
  	/*
  	 * Remember that we are using a pty, which might be a modem line.
-@@ -1738,6 +1741,26 @@ tswapscreen(void)
+@@ -1738,6 +1741,28 @@ tswapscreen(void)
  }
  
  void
 +kscrollend(const Arg* a)
 +{
 +	int n = term.scr;
++	if(n <= 0)
++		return;
 +	term.scr = 0;
 +	selscroll(0, -n);
 +	tfulldirt();
@@ -63,7 +65,7 @@ index 64bc208..11591f5 100644
 +	if(n <= 0)
 +		return;
 +	term.scr += n;
-+	selscroll(0, term.scr);
++	selscroll(0, n);
 +	tfulldirt();
 +}
 +
@@ -71,7 +73,7 @@ index 64bc208..11591f5 100644
  kscrolldown(const Arg* a)
  {
  	int n = a->i;
-@@ -1762,8 +1785,9 @@ kscrollup(const Arg* a)
+@@ -1762,8 +1787,9 @@ kscrollup(const Arg* a)
  
  	if (n < 0)
  		n = term.row + n;
@@ -82,7 +84,7 @@ index 64bc208..11591f5 100644
  		term.scr += n;
  		selscroll(0, n);
  		tfulldirt();
-@@ -1783,6 +1807,9 @@ tscrolldown(int orig, int n, int copyhist)
+@@ -1783,6 +1809,9 @@ tscrolldown(int orig, int n, int copyhist)
  		temp = term.hist[term.histi];
  		term.hist[term.histi] = term.line[term.bot];
  		term.line[term.bot] = temp;
@@ -92,7 +94,7 @@ index 64bc208..11591f5 100644
  	}
  
  	tsetdirt(orig, term.bot-n);
-@@ -1810,6 +1837,8 @@ tscrollup(int orig, int n, int copyhist)
+@@ -1810,6 +1839,8 @@ tscrollup(int orig, int n, int copyhist)
  		temp = term.hist[term.histi];
  		term.hist[term.histi] = term.line[orig];
  		term.line[orig] = temp;
