@@ -11,7 +11,7 @@ index 9b51988..0f25e8b 100644
  /*
   * What program is execed by st depends of these precedence rules:
 diff --git a/st.c b/st.c
-index 64bc208..61e1170 100644
+index 64bc208..ad6d2d7 100644
 --- a/st.c
 +++ b/st.c
 @@ -61,7 +61,6 @@ char *argv0;
@@ -52,7 +52,7 @@ index 64bc208..61e1170 100644
  /* Purely graphic info */
  typedef struct {
  	Display *dpy;
-@@ -356,6 +332,30 @@ static void sendbreak(const Arg *);
+@@ -356,6 +332,29 @@ static void sendbreak(const Arg *);
  /* Config.h for applying patches and the configuration. */
  #include "config.h"
  
@@ -64,7 +64,6 @@ index 64bc208..61e1170 100644
 +	Line *alt;    /* alternate screen */
 +	Line hist[histsize]; /* history buffer */
 +	int histi;    /* history index */
-+	int histlen;  /* history length */
 +	int scr;      /* scroll back */
 +	int *dirty;  /* dirtyness of lines */
 +	XftGlyphFontSpec *specbuf; /* font spec buffer used for rendering */
