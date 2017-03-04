@@ -6,7 +6,7 @@ Adds an Application Control Command to set the cwd.
 I created this to be used together with `tabbed-keep-cwd-20170228-bc23614.diff` from [tabbed-patches](/z33ky/tabbed-patches).
 You can override the `cd` command of your shell, or for `zsh` you can also use `function chpwd`, and just do `echo -ne "\033_0;${PWD}\007"` from there.
 
-#### `st-scrollback-begend-20170228-c63a87c.diff`
+#### `st-scrollback-begend-20170302-c63a87c.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
@@ -18,13 +18,13 @@ Based on st-scrollback-20170104-c63a87c.diff.
 
 Jumps one line further when passing negative values to `kscroll{down,up}`.
 
-#### `st-scrollback-begend-fullpage-20170228-c63a87c.diff`
+#### `st-scrollback-begend-fullpage-20170302-c63a87c.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
-Combines the `st-scrollback-begend-20170228-c63a87c.diff` and `st-scrollback-fullpage-20170228-c63a87c.diff` patches which conflict when applying separately.
+Combines the `st-scrollback-begend-20170302-c63a87c.diff` and `st-scrollback-fullpage-20170228-c63a87c.diff` patches which conflict when applying separately.
 
-#### `st-scrollback-histsize-20170228-c63a87c.diff`
+#### `st-scrollback-histsize-20170302-c63a87c.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
