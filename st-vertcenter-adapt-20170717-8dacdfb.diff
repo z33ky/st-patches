@@ -1,0 +1,94 @@
+diff --git a/st.c b/st.c
+index ae93ade..a233e58 100644
+--- a/st.c
++++ b/st.c
+@@ -437,7 +437,7 @@ x2col(int x)
+ int
+ y2row(int y)
+ {
+-	y -= borderpx;
++	y -= borderpx + xw.cyo;
+ 	y /= win.ch;
+ 
+ 	return LIMIT(y, 0, term.row-1);
+@@ -2671,15 +2671,17 @@ kmap(KeySym k, uint state)
+ void
+ cresize(int width, int height)
+ {
+-	int col, row;
++	int col = term.col, row = term.row;
+ 
+-	if (width != 0)
++	if (width != 0) {
+ 		win.w = width;
+-	if (height != 0)
++		col = (xw.w - 2 * borderpx) / xw.cw;
++	}
++	if (height != 0) {
+ 		win.h = height;
+-
+-	col = (win.w - 2 * borderpx) / win.cw;
+-	row = (win.h - 2 * borderpx) / win.ch;
++		row = (xw.h - 2 * borderpx) / xw.ch;
++		xw.cyo = (xw.h - xw.ch * row - 2 * borderpx) / 2;
++	}
+ 
+ 	tresize(col, row);
+ 	xresize(col, row);
+diff --git a/st.h b/st.h
+index a45202f..44d4938 100644
+--- a/st.h
++++ b/st.h
+@@ -134,7 +134,6 @@ typedef struct {
+ 	int w, h; /* window width and height */
+ 	int ch; /* char height */
+ 	int cw; /* char width  */
+-	int cyo; /* char y offset */
+ 	char state; /* focus, redraw, visible */
+ 	int cursor; /* cursor style */
+ } TermWindow;
+diff --git a/x.c b/x.c
+index 1d98aa9..c7edf84 100644
+--- a/x.c
++++ b/x.c
+@@ -665,7 +665,7 @@ xhints(void)
+ 	sizeh->height = win.h;
+ 	sizeh->width = win.w;
+ 	sizeh->height_inc = win.ch;
+-	sizeh->width_inc = win.cw;
++	sizeh->width_inc = 0;
+ 	sizeh->base_height = 2 * borderpx;
+ 	sizeh->base_width = 2 * borderpx;
+ 	if (xw.isfixed) {
+@@ -826,7 +826,6 @@ xloadfonts(char *fontstr, double fontsize)
+ 	/* Setting character width and height. */
+ 	win.cw = ceilf(dc.font.width * cwscale);
+ 	win.ch = ceilf(dc.font.height * chscale);
+-	win.cyo = ceilf(dc.font.height * (chscale -1) / 2);
+ 
+ 	FcPatternDel(pattern, FC_SLANT);
+ 	FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
+@@ -1025,7 +1024,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
+ 				font = &dc.bfont;
+ 				frcflags = FRC_BOLD;
+ 			}
+-			yp = winy + font->ascent + win.cyo;
++			yp = winy + font->ascent;
+ 		}
+ 
+ 		/* Lookup character index with default font. */
+@@ -1236,12 +1235,12 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
+ 
+ 	/* Render underline and strikethrough. */
+ 	if (base.mode & ATTR_UNDERLINE) {
+-		XftDrawRect(xw.draw, fg, winx, winy + win.cyo + dc.font.ascent + 1,
++		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
+ 				width, 1);
+ 	}
+ 
+ 	if (base.mode & ATTR_STRUCK) {
+-		XftDrawRect(xw.draw, fg, winx, winy + win.cyo + 2 * dc.font.ascent / 3,
++		XftDrawRect(xw.draw, fg, winx, winy + 2 * dc.font.ascent / 3,
+ 				width, 1);
+ 	}
+ 

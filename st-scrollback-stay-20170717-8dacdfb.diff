@@ -1,18 +1,18 @@
 diff --git a/st.c b/st.c
-index 64bc208..cd31620 100644
+index d33eb5b..a826282 100644
 --- a/st.c
 +++ b/st.c
-@@ -1521,9 +1521,6 @@ ttyread(void)
+@@ -847,9 +847,6 @@ ttyread(void)
  	if (buflen > 0)
  		memmove(buf, ptr, buflen);
  
--	if (term.scr > 0 && term.scr < histsize-1)
+-	if (term.scr > 0 && term.scr < HISTSIZE-1)
 -		term.scr++;
 -
  	return ret;
  }
  
-@@ -1860,6 +1857,8 @@ tnewline(int first_col)
+@@ -1186,6 +1183,8 @@ tnewline(int first_col)
  	int y = term.c.y;
  
  	if (y == term.bot) {

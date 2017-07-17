@@ -1,24 +1,16 @@
 diff --git a/st.c b/st.c
-index fbcd9e0..20e855c 100644
+index ae93ade..0a31d9f 100644
 --- a/st.c
 +++ b/st.c
-@@ -267,6 +267,7 @@ typedef struct {
- 	Draw draw;
- 	Visual *vis;
- 	XSetWindowAttributes attrs;
-+	Cursor xcursor;
- 	int scr;
- 	int isfixed; /* is fixed geometry? */
- 	int l, t; /* left and top offset */
-@@ -418,6 +419,7 @@ static void tswapscreen(void);
- static void tsetdirt(int, int);
- static void tsetdirtattr(int);
+@@ -181,6 +181,7 @@ static void tsetchar(Rune, Glyph *, int, int);
+ static void tsetscroll(int, int);
+ static void tswapscreen(void);
  static void tsetmode(int, int, int *, int);
 +static void tsetmousetracking(int, int, int);
  static void tfulldirt(void);
  static void techo(Rune);
  static void tcontrolcode(uchar );
-@@ -2180,24 +2182,16 @@ tsetmode(int priv, int set, int *args, int narg)
+@@ -1511,24 +1512,16 @@ tsetmode(int priv, int set, int *args, int narg)
  				MODBIT(term.mode, !set, MODE_HIDE);
  				break;
  			case 9:    /* X10 mouse compatibility mode */
@@ -47,7 +39,7 @@ index fbcd9e0..20e855c 100644
  				break;
  			case 1004: /* 1004: send focus events to tty */
  				MODBIT(term.mode, set, MODE_FOCUS);
-@@ -2275,6 +2269,18 @@ tsetmode(int priv, int set, int *args, int narg)
+@@ -1606,6 +1599,15 @@ tsetmode(int priv, int set, int *args, int narg)
  }
  
  void
@@ -56,17 +48,38 @@ index fbcd9e0..20e855c 100644
 +	xsetpointermotion(pmset);
 +	MODBIT(term.mode, 0, MODE_MOUSE);
 +	MODBIT(term.mode, set, mode);
-+	if (set)
-+		XUndefineCursor(xw.dpy, xw.win);
-+	else
-+		XDefineCursor(xw.dpy, xw.win, xw.xcursor);
++	xsetcursor(set);
 +}
 +
 +void
  csihandle(void)
  {
  	char buf[40];
-@@ -3572,7 +3578,6 @@ void
+diff --git a/win.h b/win.h
+index 428111c..7906efa 100644
+--- a/win.h
++++ b/win.h
+@@ -22,6 +22,7 @@ void xloadfonts(char *, double);
+ void xsetenv(void);
+ void xsettitle(char *);
+ void xsetpointermotion(int);
++void xsetcursor(int);
+ void xseturgency(int);
+ void xunloadfonts(void);
+ void xresize(int, int);
+diff --git a/x.c b/x.c
+index fbfd350..79286a7 100644
+--- a/x.c
++++ b/x.c
+@@ -47,6 +47,7 @@ typedef struct {
+ 	Draw draw;
+ 	Visual *vis;
+ 	XSetWindowAttributes attrs;
++	Cursor xcursor;
+ 	int scr;
+ 	int isfixed; /* is fixed geometry? */
+ 	int l, t; /* left and top offset */
+@@ -871,7 +872,6 @@ void
  xinit(void)
  {
  	XGCValues gcvalues;
@@ -74,7 +87,7 @@ index fbcd9e0..20e855c 100644
  	Window parent;
  	pid_t thispid = getpid();
  	XColor xmousefg, xmousebg;
-@@ -3648,8 +3653,8 @@ xinit(void)
+@@ -947,8 +947,8 @@ xinit(void)
  		die("XCreateIC failed. Could not obtain input method.\n");
  
  	/* white cursor, black outline */
@@ -85,7 +98,7 @@ index fbcd9e0..20e855c 100644
  
  	if (XParseColor(xw.dpy, xw.cmap, colorname[mousefg], &xmousefg) == 0) {
  		xmousefg.red   = 0xffff;
-@@ -3663,7 +3668,7 @@ xinit(void)
+@@ -962,7 +962,7 @@ xinit(void)
  		xmousebg.blue  = 0x0000;
  	}
  
@@ -94,3 +107,19 @@ index fbcd9e0..20e855c 100644
  
  	xw.xembed = XInternAtom(xw.dpy, "_XEMBED", False);
  	xw.wmdeletewin = XInternAtom(xw.dpy, "WM_DELETE_WINDOW", False);
+@@ -1467,6 +1467,15 @@ xsetpointermotion(int set)
+ }
+ 
+ void
++xsetcursor(int set)
++{
++	if (set)
++		XUndefineCursor(xw.dpy, xw.win);
++	else
++		XDefineCursor(xw.dpy, xw.win, xw.xcursor);
++}
++
++void
+ xseturgency(int add)
+ {
+ 	XWMHints *h = XGetWMHints(xw.dpy, xw.win);

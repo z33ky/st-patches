@@ -1,47 +1,47 @@
 My patches for [st](st.suckless.org).
 
-#### `st-apc-cwd-20170228-c63a87c.diff`
+#### `st-apc-cwd-20170717-8dacdfb.diff`
 
 Adds an Application Control Command to set the cwd.
 I created this to be used together with `tabbed-keep-cwd-20170228-bc23614.diff` from [tabbed-patches](/z33ky/tabbed-patches).
 You can override the `cd` command of your shell, or for `zsh` you can also use `function chpwd`, and just do `echo -ne "\033_0;${PWD}\007"` from there.
 
-#### `st-scrollback-begend-20170302-c63a87c.diff`
+#### `st-scrollback-begend-20170717-8dacdfb.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
 Adds functions to jump to the beginning and end of the history.
 
-#### `st-scrollback-fullpage-20170228-c63a87c.diff`
+#### `st-scrollback-fullpage-20170717-8dacdfb.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
 Jumps one line further when passing negative values to `kscroll{down,up}`.
 
-#### `st-scrollback-begend-fullpage-20170302-c63a87c.diff`
+#### `st-scrollback-begend-fullpage-20170717-8dacdfb.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
 Combines the `st-scrollback-begend-20170302-c63a87c.diff` and `st-scrollback-fullpage-20170228-c63a87c.diff` patches which conflict when applying separately.
 
-#### `st-scrollback-histsize-20170302-c63a87c.diff`
+#### `st-scrollback-histsize-20170717-8dacdfb.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
 Moves the `histsize` constant to `config.h`.
 
-#### `st-scrollback-stay-20170228-c63a87c.diff`
+#### `st-scrollback-stay-20170717-8dacdfb.diff`
 
 Based on st-scrollback-20170104-c63a87c.diff.
 
 Stops scrolling through history when further output is written to the terminal.
 
-#### `st-vertcenter-scale1-20170228-c63a87c.diff`
+#### `st-vertcenter-scale1-20170717-8dacdfb.diff`
 
 Based on st-vertcenter-20160819-023225e.diff.
 
 Works with `chscale == 1`.
 
-#### `st-mousetracking-default-xcursor-20170301-c63a87c.diff`
+#### `st-mousetracking-default-xcursor-20170717-8dacdfb.diff`
 
 Change to default X11 cursor when in mouse tracking mode.
